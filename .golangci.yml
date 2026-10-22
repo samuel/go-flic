@@ -1,0 +1,40 @@
+version: "2"
+
+linters:
+  enable:
+    - copyloopvar
+    - errorlint
+    - gocritic
+    - gosec
+    - intrange
+    - misspell
+    - modernize
+    - nolintlint
+    - perfsprint
+    - revive
+    - unconvert
+    - unparam
+    - usestdlibvars
+  settings:
+    misspell:
+      locale: US
+    nolintlint:
+      require-specific: true
+    gosec:
+      excludes:
+        - G115 # Integer conversions are deliberate when decoding fixed-width fields.
+        - G304 # Reading a caller-given path is the point of the CLI and tests.
+  exclusions:
+    rules:
+      # Methods that implement Chunk are documented on the interface.
+      - linters: [revive]
+        text: "exported method .*\\.(ChunkType|String|SubChunks) should have comment"
+      # golden.json is a normal checked-in file.
+      - linters: [gosec]
+        path: _test\.go
+        text: G306
+
+formatters:
+  enable:
+    - gofmt
+    - goimports
